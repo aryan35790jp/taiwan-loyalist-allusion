@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# bundles / build artifacts (regenerable)
+*.zip
+colab/RUN_IN_COLAB.ipynb
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.synctex.gz
+*.toc
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+PAPER.pdf
+
+# OS
+.DS_Store
+Thumbs.db

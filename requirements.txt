@@ -1,0 +1,11 @@
+requests>=2.31
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
+ruptures>=1.1
+statsmodels>=0.14
+beautifulsoup4>=4.12
+lxml>=4.9
+jieba>=0.42
+matplotlib>=3.7
+opencc-python-reimplemented>=0.1.7
