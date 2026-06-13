@@ -25,6 +25,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!55!black}
+\usepackage{xurl}   % allow long URLs / repo paths to wrap inside narrow columns
 \usepackage{titlesec}
 \titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
@@ -39,7 +40,7 @@
 Classical Poetry across the 1895 Rupture}
 \author{Aryan Maity\\[2pt]
 St.~Edmund's College\\[2pt]
-\normalsize\href{https://github.com/aryan35790jp/taiwan-loyalist-allusion}{\texttt{github.com/aryan35790jp/taiwan-loyalist-allusion}}}
+\normalsize\nolinkurl{github.com/aryan35790jp/taiwan-loyalist-allusion}}
 \date{}
 
 \begin{document}
@@ -436,7 +437,7 @@ All code, the graded loyalist lexicon and neutral control, the dated corpora har
 public sources, the verse detector, every statistical procedure (bootstrap intervals,
 block bootstrap, permutation tests, the per-family decomposition), and the SikuBERT probe run
 deterministically with fixed seeds. The complete repository is available at
-\href{https://github.com/aryan35790jp/taiwan-loyalist-allusion}{\texttt{github.com/aryan35790jp/taiwan-loyalist-allusion}}.
+\nolinkurl{github.com/aryan35790jp/taiwan-loyalist-allusion}.
 The pipeline includes an ingestion path for the national
 \mbox{全臺詩} export so that the population analysis can be run without code changes once the
 corpus is available.
