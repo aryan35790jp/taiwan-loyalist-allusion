@@ -1,0 +1,468 @@
+% !TEX program = xelatex
+% =====================================================================
+% Compile with XeLaTeX (needed for the Chinese characters).
+% On Overleaf: Menu -> Compiler -> XeLaTeX.
+% =====================================================================
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[a4paper,margin=0.85in]{geometry}
+\setlength{\columnsep}{0.62cm}
+\usepackage{fontspec}
+\usepackage{xeCJK}
+% Robust CJK font selection: prefer Noto Serif CJK TC, fall back to Fandol.
+\IfFontExistsTF{Noto Serif CJK TC}%
+  {\setCJKmainfont{Noto Serif CJK TC}}%
+  {\IfFontExistsTF{FandolSong}{\setCJKmainfont{FandolSong}}{}}
+
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!55!black}
+\usepackage{titlesec}
+\titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
+\titlespacing*{\section}{0pt}{1.4ex plus .3ex}{0.8ex}
+\setlength{\parskip}{0.35em}
+\sisetup{detect-weight=true}
+
+\newcommand{\dens}[1]{\mbox{#1}}
+
+\title{\bfseries The Half-Life of a Lost Empire:\\[2pt]
+\large Measuring the Decay of Loyalist Allusion in Taiwan's\\
+Classical Poetry across the 1895 Rupture}
+\author{Aryan Maity\\[2pt]
+St.~Edmund's College\\[2pt]
+\normalsize\href{https://github.com/aryan35790jp/taiwan-loyalist-allusion}{\texttt{github.com/aryan35790jp/taiwan-loyalist-allusion}}}
+\date{}
+
+\begin{document}
+\makeatletter
+\twocolumn[
+  \begin{@twocolumnfalse}
+  \maketitle
+
+\begin{abstract}
+\noindent
+When the Qing ceded Taiwan to Japan in 1895, the island's classical poets faced a second
+fall of a realm within living cultural memory of the first, the Ming collapse that had once
+driven loyalists across the strait to Koxinga's Taiwan. This paper asks whether that second
+rupture left a measurable trace in the language of the verse itself. Working only from
+openly available texts and an auditable lexicon of dynastic--loss and loyalist allusion
+(\mbox{黍離}, \mbox{採薇}, \mbox{文天祥}, \mbox{屈原}, and the local \mbox{延平}--\mbox{東寧}
+tradition), we score the density of loyalist allusion across a corpus dated by era and find
+a clear bimodal shape: the register is loud at the Ming--Zheng founding, falls almost silent
+through the settled mid-Qing, and rises again into the cession years. Against the stable
+mid-Qing baseline the rupture-era density is roughly three times higher
+($0.087 \to 0.268$ per hundred characters, $p<0.0001$), while a frequency-matched set of
+neutral canonical allusions stays flat, so the rise is specific to loyalism rather than a
+general taste for allusion. The surge is carried by the classical canon of martyrdom and
+refusal-to-serve ($\mbox{採薇}/\mbox{文天祥}/\mbox{田橫}/\mbox{蘇武}$, $p=0.0065$), not by the
+local Koxinga vocabulary, and it survives every variation of the detector we tried. Two
+independent checks support the reading: an officially compiled gazetteer corpus reproduces
+the mid-Qing baseline almost exactly ($p=0.71$), and a classical-Chinese language model that
+never saw our lexicon nonetheless separates loyalist from control poems well above chance
+($0.70$ vs.\ $0.51$, $p<0.0001$), which argues that the register is a real property of the
+language and not an artefact of a word list. We are candid about what the present data cannot
+settle: the single corpus that would close the question of editorial selection at the rupture
+peak is a national database that is no longer reachable, and we mark that analysis as the
+clear next step rather than claim it. What remains is a quantified, falsifiable account of a
+literature reaching for an inherited language of loss at the moment its world changed.
+\end{abstract}
+  \vspace{1.2em}
+  \end{@twocolumnfalse}
+]
+\makeatother
+
+\section{Introduction}
+The standard history of Taiwan's classical poetry is usually told as a story of communities:
+who founded which poetry society, which anthologies preserved whose work, and how the
+literati negotiated life first under the Qing and then under Japanese rule. Running through
+that history is a quieter thread that scholars of the period have long recognised but rarely
+measured, namely a recurring language of dynastic loss. The poets who followed Koxinga to
+Taiwan after the Ming fell wrote as \mbox{遺民}, ``leftover subjects'' of a house that no
+longer ruled, and they reached for a fixed repertoire of classical figures, the millet of
+the ruined Zhou capital, the brothers who starved rather than eat Zhou grain, the loyal
+minister drowned in the Xiang, to say what could not be said directly. Two and a half
+centuries later, when the Treaty of Shimonoseki handed the island to Japan in 1895, a new
+generation of Taiwanese poets reached, it has often been observed, for the same repertoire.
+
+The observation is old; the measurement is not. Literary historians have read the loyalist
+strain in colonial-era Taiwan poetry closely and persuasively, but case by case, poet by
+poet. What no one has done, to our knowledge, is treat the repertoire as a countable object
+and ask how its frequency moves across the whole span of the tradition. That is the question
+of this paper. If the second fall of a realm reactivated the first's language of mourning,
+the trace should be visible not only in the poems historians already cite but in the
+aggregate: loyalist allusion should be measurably denser in the verse written around 1895
+than in the verse of the long, settled century before it, and the rise should be specific to
+loyalism rather than a by-product of poets simply alluding more.
+
+We answer this with a deliberately conservative method. From authoritative reference sources
+we build a graded lexicon of dynastic-loss and loyalist allusion, every entry anchored to a
+classical locus and weighted by how exclusively it signals loyalism. We match it, by exact
+and human-checkable string matching, against poems dated by era, and we measure the density
+of loyalist allusion per hundred characters against a frequency-matched set of neutral
+canonical allusions that serves as a control. The headline result is a bimodal curve: the
+loyalist register is loud at the Ming--Zheng founding, nearly silent in the mid-Qing, and
+loud again at the cession. Our contributions are:
+
+\begin{itemize}\setlength{\itemsep}{2pt}
+\item a graded, openly auditable lexicon of loyalist allusion for classical Chinese, with a
+frequency-matched neutral control, designed so that every measurement can be checked by hand;
+\item a bimodal diachronic finding---loyalist allusion peaking at both of Taiwan's sovereignty
+ruptures and falling quiet between them---that is significant, specific to loyalism, and
+robust to the matching choices;
+\item a decomposition showing that the 1895 surge is driven by the classical canon of
+martyrdom and refusal-to-serve rather than by the local Koxinga vocabulary;
+\item two independent corroborations (an officially compiled gazetteer baseline and a
+language-model probe that never saw the lexicon); and
+\item an honest account of the one question the available data cannot close, and a
+pipeline ready to close it the moment the national corpus becomes reachable again.
+\end{itemize}
+
+\section{Background}
+\subsection{Loyalism and the language of dynastic loss}
+The figure of the \mbox{遺民}, the subject who outlives the dynasty he served and refuses to
+serve its successor, is one of the oldest in the Chinese literary tradition, and it carries
+with it a settled vocabulary. The mourning of a fallen capital is spoken through
+\mbox{黍離}, the millet growing over the ruins of Zhou; refusal to take office under the
+conqueror through Bo Yi and Shu Qi, who starved on Mount Shouyang rather than eat the grain
+of Zhou (\mbox{採薇}); loyal death through Wen Tianxiang, the Song minister executed by the
+Yuan, and through the five hundred followers of Tian Heng who died together rather than
+submit. Taiwan's place in this tradition is unusually concrete, because the island was itself
+a loyalist refuge: Koxinga (\mbox{鄭成功}, Prince of \mbox{延平}) held it for the Ming cause,
+and the polity his family ran was named \mbox{東寧}. When 1895 came, the inherited language
+of the first fall lay ready to hand for the second, and with a local edge the mainland
+tradition did not have.
+
+Scholarship on colonial-era Taiwan literature has read this loyalist strain with care, most
+fully in studies of loyalism and the figure of the loyal subject under Japanese rule. That
+work is qualitative and interpretive, and it is the foundation we build on; our aim is not to
+displace it but to give it a quantitative spine, to ask whether the pattern close reading
+finds in individual poets holds across the corpus when counted.
+
+\subsection{Computational study of allusion}
+Detecting allusion and intertextual reuse computationally is an established line of work in
+the digital humanities, and recent studies have applied it to classical Chinese poetry, both
+through phrase matching against a reference canon and through language models trained on
+classical text. We take the simplest defensible position available: lexicon matching, in
+which every hit is a known figure with a known classical source and can be inspected by a
+reader. This trades recall for transparency, which is the right trade when the object of
+study is a contested historical claim rather than a benchmark score. To guard against the
+obvious worry that a lexicon merely finds itself, we complement it with a representational
+probe using a classical-Chinese language model that has no knowledge of our list.
+
+\section{Data}
+\subsection{The dated anthology}
+Our primary diachronic corpus is \mbox{連橫}'s \mbox{《臺灣詩乘》} (\emph{Taiwan Poetry
+Records}, c.\ 1921), a six-volume critical anthology that quotes poems within editorial prose
+that narrates the island's literary history in rough chronological order. We extract every
+bracketed quoted poem and date it by the nearest preceding temporal marker in the surrounding
+prose (a reign era such as \mbox{光緒}, or a dated event such as the cession), which yields
+997 poems carrying an approximate year between 1665 and 1896. The procedure uses the
+anthology's own chronology and requires no manual dating.
+
+\subsection{Independent and single-author corpora}
+Because an anthology reflects its editor's choices, we add two corpora that \mbox{連橫} did
+not compile. The first is the complete chronological collection of a single poet who lived
+through the rupture, \mbox{許南英}'s \mbox{《窺園留草》} (the poet organised the defence of
+Tainan in 1895 and then fled to the mainland); its sections are dated by year, giving an
+uncurated within-author series from 1884 to 1917. The second is a set of 867 regulated-verse
+poems extracted from official Qing gazetteers (\mbox{諸羅縣志}, \mbox{臺灣縣志},
+\mbox{重修臺灣縣志}, \mbox{臺海使槎錄}), compiled by Qing officials rather than by any
+loyalist, which provides an independent early/mid-Qing baseline. For a poet-level validation
+we also collect the author-attributed poems of \mbox{丘逢甲}, \mbox{連橫}, and the modernist
+\mbox{賴和} from a public text repository.
+
+\subsection{Provenance and honesty about access}
+All texts above are openly readable. The one corpus that would settle the question of
+editorial selection at the rupture peak, the national \mbox{全臺詩} (\emph{Complete Taiwanese
+Poems}) database of roughly fifty thousand poems, is no longer reachable online (its host no
+longer resolves) and survives in print and behind a commercial subscription. Our pipeline is
+written to ingest its export unchanged; until that is possible, we report what the reachable
+corpora can and cannot establish, and mark the population analysis as future work rather than
+fold an inaccessible result into our claims.
+
+\section{Method}
+\subsection{A graded loyalist lexicon and a neutral control}
+The loyalist lexicon collects the standard repertoire of dynastic-loss and loyalist allusion
+across six families: mourning a fallen realm (\mbox{黍離}, \mbox{銅駝}, \mbox{崖山}),
+loyalty and refusal to serve (\mbox{採薇}, \mbox{文天祥}, \mbox{田橫}, \mbox{蘇武}), the
+exiled loyal minister (\mbox{屈原}, \mbox{庾信}, \mbox{新亭}), withdrawal as political refusal
+(\mbox{桃源}, \mbox{商山四皓}), the local Ming--Zheng layer (\mbox{延平}, \mbox{東寧},
+\mbox{寧靖王}, \mbox{五妃}), and explicit loyalist diction (\mbox{遺民}, \mbox{孤臣},
+\mbox{割臺}). Each entry lists its surface forms, is anchored to a classical locus, and is
+weighted by a \emph{specificity} score in $[0,1]$ recording how exclusively it signals
+loyalism: $1.0$ for figures that essentially only mean dynastic loss (\mbox{黍離},
+\mbox{採薇}), lower for multivalent ones (\mbox{故國}, \mbox{山河}). The primary analysis uses
+the high-specificity subset ($\geq 0.8$) so conclusions do not rest on the multivalent tail;
+a sensitivity run uses the full lexicon. The neutral control is a frequency-matched set of
+pervasive but non-loyalist canonical allusions (parting willows, the moon, examination
+success, wine gatherings), used to test whether any rise is specific to loyalism.
+
+\subsection{Detection and density}
+Matching is exact substring matching on traditional-character surface forms, longest form
+first so that a four-character figure is not also counted as its two-character substrings,
+and each distinct entry is credited once per poem. Text in simplified characters is converted
+to traditional before matching. For a poem of $N$ Han characters with high-specificity
+loyalist entries $E$ present, the loyalist density is
+\[
+\rho_{\text{loy}} \;=\; \frac{100}{N}\sum_{e\in E}\, s_e ,
+\]
+where $s_e$ is the specificity weight; the control density is defined the same way over
+control hits. Densities are reported per hundred characters. Where a source mixes prose and
+verse (the gazetteers), we first isolate regulated poems with a verse detector that keeps
+runs of clauses of a single canonical line length (five or seven characters) and rejects
+runs dense in classical-prose function words.
+
+\subsection{Statistics}
+The headline contrast is rupture-era density (poems dated $\geq 1894$) against the stable
+mid-Qing baseline (1700--1860), the comparison the bimodal shape motivates. Differences are
+tested by a bootstrap over poems ($10{,}000$ resamples, seed fixed), reported with a
+$95\%$ confidence interval and a two-sided $p$-value; we also report a difference-in-
+differences against the control. We give a block bootstrap clustered by source volume as a
+conservative check, and we run the contrast under several detector settings to show it does
+not depend on one matching choice. All randomised procedures use a fixed seed.
+
+\subsection{Representational probe}
+As an independent test of whether the loyalist register is real rather than a property of our
+word list, we embed poems with SikuBERT, a BERT model pre-trained on the \mbox{四庫全書} and
+therefore innocent of our lexicon. Each poem is labelled loyalist or control by which
+register dominates its allusions; we mean-pool the model's final layer and ask whether a
+five-fold cross-validated logistic probe separates the two classes above a label-shuffle
+null. If the model that never saw the lexicon can recover the distinction, the register is a
+property of the language.
+
+\section{Results}
+\subsection{A bimodal curve across two ruptures}
+Loyalist-allusion density across the dated anthology is not flat and not monotonic. It is
+high at the Ming--Zheng founding, collapses through the settled mid-Qing, and rises again
+toward the cession (Table~\ref{tab:era}). The two peaks sit at exactly the two moments when
+sovereignty over the island changed hands; the trough sits in the long century of Qing rule
+between them. A neutral control of canonical non-loyalist allusion shows no such shape.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Loyalist vs.\ neutral-control allusion density (per 100 characters) by era in the
+dated anthology ($n=997$). The loyalist register peaks at both sovereignty ruptures and
+falls quiet in the settled mid-Qing; the control does not.}
+\label{tab:era}
+\begin{tabular}{lccc}
+\toprule
+Era (approx.) & poems & loyalist $\rho$ & control $\rho$ \\
+\midrule
+Ming--Zheng founding ($\leq$1683) & 425 & 0.239 & 0.13 \\
+Early/mid Qing (1700--1860)       & 284 & 0.087 & 0.18 \\
+Late Qing (1868--1893)            & 111 & 0.255 & 0.23 \\
+Cession / rupture ($\geq$1894)    & 177 & 0.268 & 0.18 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The comparison the shape calls for is the rupture era against the stable mid-Qing trough,
+not against everything before it (which is diluted by the high founding era). On that
+contrast the rupture-era loyalist density is $3.07$ times the mid-Qing density
+($0.087 \to 0.268$; bootstrap difference $+0.181$, $95\%$ CI $[0.089, 0.273]$, $p<0.0001$).
+The control density is, over the same comparison, essentially unchanged
+($0.18 \to 0.18$, $p=0.99$), so the difference-in-differences is $+0.18$: the rise belongs to
+loyalist allusion specifically and not to a general increase in allusiveness. The founding
+era is elevated to a similar degree ($2.75\times$ the trough), which is the bimodal pattern
+stated in numbers.
+
+\subsection{Which figures carry the rupture}
+The surge is not spread evenly across the repertoire. Decomposing the rupture-versus-mid-Qing
+difference by trope family (Table~\ref{tab:cat}) shows it is carried by the classical canon
+of loyalty and refusal-to-serve, with the dynastic-fall topoi second; the local
+Koxinga--Dongning vocabulary contributes only marginally, and the explicit cession-diction
+hardly at all on its own. In other words, the 1895 poets did not mainly reach for local
+references to their own situation; they reached for Bo Yi and Shu Qi, Wen Tianxiang, Tian
+Heng, and Su Wu, the inherited language of the loyal subject who will not serve.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Per-family decomposition of the rupture-vs-mid-Qing difference (high-specificity
+entries). The surge is driven by the loyalty/refusal canon and dynastic-fall topoi, not by
+the local Koxinga layer.}
+\label{tab:cat}
+\begin{tabular}{lccc}
+\toprule
+Trope family & mid-Qing & rupture & $\Delta$ (95\% CI), $p$ \\
+\midrule
+Loyalty / refusal (採薇, 文天祥, 田橫, 蘇武) & 0.045 & 0.139 & $+0.094\ [0.025,0.165]$, $p{=}0.007$ \\
+Dynastic fall (黍離, 崖山, 銅駝)            & 0.005 & 0.040 & $+0.035\ [0.003,0.069]$, $p{=}0.036$ \\
+Ming--Zheng local (延平, 東寧)             & 0.015 & 0.050 & $+0.035\ [-0.003,0.080]$, $p{=}0.089$ \\
+Direct diction (割臺, 孤臣)                & 0.000 & 0.017 & $+0.017\ [0.000,0.044]$, $p{=}0.29$ \\
+Exile / displacement (屈原, 新亭)          & 0.022 & 0.021 & $-0.001\ [-0.029,0.032]$, $p{=}0.93$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{The result does not depend on the detector}
+The headline contrast holds, between $2.5$ and $3.1$ times the baseline, under every variant
+of the detector we tried: the full lexicon as well as the high-specificity subset, raw token
+counts as well as weighted presence, and crucially with the local Koxinga layer removed, with
+the explicit cession-diction removed, and with both removed at once
+(Table~\ref{tab:robust}). Even stripped of both the locally-specific layers, the rupture era
+runs $2.79$ times the mid-Qing trough ($p=0.003$), which is the strongest evidence that the
+signal lives in the deep classical repertoire rather than in a handful of topical words.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Robustness of the rupture-vs-mid-Qing contrast across detector settings. Significant
+and $2.5$--$3.1\times$ throughout.}
+\label{tab:robust}
+\begin{tabular}{lccc}
+\toprule
+Detector setting & ratio & $\Delta$ & $p$ \\
+\midrule
+High-specificity ($\geq 0.8$), presence & $3.07\times$ & $0.181$ & $<0.0001$ \\
+Full lexicon, presence                  & $2.74\times$ & $0.258$ & $<0.0001$ \\
+Full lexicon, raw tokens                & $2.48\times$ & $0.340$ & $<0.0001$ \\
+Minus Ming--Zheng layer                 & $3.02\times$ & $0.146$ & $0.0005$ \\
+Minus direct diction                    & $2.88\times$ & $0.164$ & $<0.0001$ \\
+Minus both local layers                 & $2.79\times$ & $0.129$ & $0.003$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{An independent corpus reproduces the baseline}
+The diachronic curve rests on one editor's anthology, which raises the fair worry that the
+shape reflects \mbox{連橫}'s selection rather than the literature. We test the worry where it
+can be tested. The mid-Qing baseline of the anthology should, if it is real and not an
+artefact of selection, agree with an independently compiled corpus of the same period. It
+does: the 867 gazetteer verses, assembled by Qing officials, give a mid-Qing loyalist density
+of $0.078$, statistically indistinguishable from the anthology's mid-Qing $0.087$ (bootstrap
+difference $0.010$, $95\%$ CI $[-0.036, 0.058]$, $p=0.71$). Against this independent baseline
+the anthology's rupture poems remain elevated by $+0.191$ ($p<0.0001$) with the control flat
+($p=0.32$). The trough, in short, is not something \mbox{連橫} manufactured.
+
+\subsection{The same shape inside one poet's life}
+The clearest view of the rupture as a lived event comes from a single uncurated collection.
+\mbox{許南英}'s chronologically arranged works move from a pre-rupture baseline of $0.102$ to
+$0.131$ in the cession window of 1895--1900 and back down to $0.080$ after 1900, and an
+unsupervised changepoint on the series falls at 1897, within the rupture. The spike and the
+subsequent decay, the ``half-life'' of the title, appear here in a corpus no anthologist
+shaped, though with the small numbers of a single life they are directional rather than
+decisive. This single-author trajectory and the population question it raises is exactly what
+the unreachable national corpus would let us pursue at scale.
+
+\subsection{A model that never saw the lexicon finds the register}
+If the loyalist register were only an artefact of our word list, a language model with no
+knowledge of that list should not be able to tell loyalist poems from control poems. It can.
+Embedding the anthology poems with SikuBERT and training a cross-validated logistic probe to
+separate the two classes gives an accuracy of $0.70$ against a label-shuffle null of $0.51$
+($p<0.0001$; Table~\ref{tab:probe}). The separation is reliably decodable rather than
+visually clean (the silhouette is small), which is the honest description of an effect that a
+classifier recovers but that does not split the space into tidy clusters. Restricting to
+rupture-era poems the probe reaches $0.81$, and on mid-Qing poems $0.74$; both clear their
+nulls, and the register is, if anything, a little sharper at the rupture.
+
+\begin{table*}[t]
+\centering
+\footnotesize
+\caption{Representational probe with SikuBERT (five-fold CV accuracy vs.\ label-shuffle null).
+The register is decodable by a model innocent of our lexicon.}
+\label{tab:probe}
+\begin{tabular}{lcccc}
+\toprule
+Subset & poems & CV accuracy & null & $p$ \\
+\midrule
+All eras           & 200 & 0.700 & 0.511 & $<0.0001$ \\
+Rupture ($\geq$1894) & 43  & 0.808 & 0.567 & $<0.0001$ \\
+Mid-Qing (1700--1860) & 42 & 0.736 & 0.581 & $0.02$ \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\section{What the data say, and what they do not}
+Read together, the analyses tell a consistent story. The language of dynastic loss is loud at
+both moments when Taiwan's sovereignty changed and quiet in the century between; the rise at
+1895 is specific to loyalist allusion and not to allusion in general; it is carried by the
+inherited canon of loyal refusal rather than by local references; it survives every change of
+detector; an independently compiled corpus reproduces the baseline it is measured against;
+and a language model with no access to the lexicon recovers the same distinction. That is a
+considerable amount of mutually independent support for a claim that has, until now, rested on
+close reading alone.
+
+We are equally clear about the limits. A poet-level check, comparing poets whom historians
+label loyalist against the modernist \mbox{賴和}, points the right way but is not significant:
+\mbox{丘逢甲}'s own works are markedly loyalist ($0.177$), yet pooled across loyalist poets the
+lyric signal is concentrated in him rather than uniform ($0.091$ vs.\ $0.067$, $p\approx0.24$).
+More importantly, the diachronic contrast that is decisive at the level of individual poems
+becomes non-significant when we cluster conservatively by the six anthology volumes
+($p=0.12$); volume clustering is coarse and partly confounded with the time axis itself, since
+the volumes are ordered chronologically, but we report it rather than hide it. The conclusions
+that do not depend on that single clustering choice, the per-family decomposition, the
+independent gazetteer baseline, and the model probe, are the ones on which we rest the
+argument.
+
+\section{Limitations}
+The decisive remaining question is editorial selection at the rupture peak. We have closed it
+for the baseline, by independent replication, and shown the peak is robust against that
+independent baseline, but the peak's own significance still draws on one anthology. The corpus
+that would settle it, the national \mbox{全臺詩} of some fifty thousand dated poems across many
+independent hands, is not currently reachable online and sits otherwise in print and behind a
+subscription; our pipeline is built to run on it unchanged. Beyond this, dating by editorial
+marker is coarse, at the granularity of reign eras rather than years; lexicon matching favours
+precision over recall and so undercounts paraphrased or oblique allusion; and the gazetteer
+baseline, while independent, is official descriptive verse and so differs in register from
+personal lyric, which is why we use it to corroborate the baseline rather than to test the
+peak directly. None of these touches the internal logic of the comparisons; each marks a place
+where more or better data would sharpen the estimate.
+
+\section{Conclusion}
+We set out to ask whether the second fall of a realm, the cession of Taiwan in 1895, left a
+countable trace in the language of the island's classical poetry, and whether that trace
+echoed the language of the first fall that had made Taiwan a loyalist refuge two centuries
+before. The answer the reachable data give is yes, with the bimodal shape that the hypothesis
+predicts: loyalist allusion peaks at both ruptures and falls quiet between them, the rise is
+specific to loyalism, it is carried by the deep canon of loyal refusal, and it is recoverable
+by a model that never saw our word list. The one analysis that would make the case airtight,
+the full population in place of a single anthology, is specified and waiting on access. What we
+offer in the meantime is not a final word but a measured one: a falsifiable, openly auditable
+account of a literature reaching, at the moment its world changed, for an old language of loss.
+
+\section*{Reproducibility}
+All code, the graded loyalist lexicon and neutral control, the dated corpora harvested from
+public sources, the verse detector, every statistical procedure (bootstrap intervals,
+block bootstrap, permutation tests, the per-family decomposition), and the SikuBERT probe run
+deterministically with fixed seeds. The complete repository is available at
+\href{https://github.com/aryan35790jp/taiwan-loyalist-allusion}{\texttt{github.com/aryan35790jp/taiwan-loyalist-allusion}}.
+The pipeline includes an ingestion path for the national
+\mbox{全臺詩} export so that the population analysis can be run without code changes once the
+corpus is available.
+
+\begin{thebibliography}{99}
+\footnotesize
+\bibitem{tsai2014} Chien-hsin Tsai. \emph{A Passage to China: Literature, Loyalism, and
+Colonial Taiwan}. Harvard University Asia Center, 2014.
+\bibitem{nmtl} National Museum of Taiwan Literature. \emph{全臺詩 (Complete Taiwanese Poems)}.
+Tainan: NMTL (multi-volume; digital knowledge base, formerly at xdcm.nmtl.gov.tw).
+\bibitem{lianheng} 連橫 (Lian Heng). \emph{臺灣詩乘 (Taiwan Poetry Records)}. c.\ 1921.
+\bibitem{xunanying} 許南英 (Xu Nanying). \emph{窺園留草}. Reprinted Taipei, 20th c.
+\bibitem{unihan} The Unicode Consortium. \emph{Unicode Han Database (Unihan)}, UAX \#38.
+\bibitem{rousseeuw1987} Peter J. Rousseeuw. Silhouettes: a graphical aid to the
+interpretation and validation of cluster analysis. \emph{J. Comput. Appl. Math.},
+20:53--65, 1987.
+\bibitem{efron1979} Bradley Efron. Bootstrap methods: another look at the jackknife.
+\emph{The Annals of Statistics}, 7(1):1--26, 1979.
+\bibitem{truong2020} Charles Truong, Laurent Oudre, and Nicolas Vayatis. Selective review of
+offline change point detection methods. \emph{Signal Processing}, 167:107299, 2020.
+\bibitem{sikubert} Dongbo Wang et al. SikuBERT: pre-trained language models for digital
+humanities research in classical Chinese. 2021.
+\bibitem{opencc} BYVoid and contributors. \emph{OpenCC: Open Chinese Convert}.
+\url{https://github.com/BYVoid/OpenCC}.
+\bibitem{coffee2018} Neil Coffee et al. Intertextuality in the digital age and the
+computational study of allusion. \emph{Digital scholarship in the humanities}, 2018.
+\end{thebibliography}
+
+\end{document}
