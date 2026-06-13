@@ -25,7 +25,6 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \hypersetup{colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!55!black}
-\usepackage{xurl}   % allow long URLs / repo paths to wrap inside narrow columns
 \usepackage{titlesec}
 \titleformat{\section}{\large\bfseries}{\thesection}{0.6em}{}
 \titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{0.6em}{}
@@ -226,8 +225,8 @@ runs dense in classical-prose function words.
 The headline contrast is rupture-era density (poems dated $\geq 1894$) against the stable
 mid-Qing baseline (1700--1860), the comparison the bimodal shape motivates. Differences are
 tested by a bootstrap over poems ($10{,}000$ resamples, seed fixed), reported with a
-$95\%$ confidence interval and a two-sided $p$-value; we also report a difference-in-
-differences against the control. We give a block bootstrap clustered by source volume as a
+$95\%$ confidence interval and a two-sided $p$-value; we also report a
+difference-in-differences against the control. We give a block bootstrap clustered by source volume as a
 conservative check, and we run the contrast under several detector settings to show it does
 not depend on one matching choice. All randomised procedures use a fixed seed.
 
@@ -259,10 +258,10 @@ falls quiet in the settled mid-Qing; the control does not.}
 \toprule
 Era (approx.) & poems & loyalist $\rho$ & control $\rho$ \\
 \midrule
-Ming--Zheng founding ($\leq$1683) & 425 & 0.239 & 0.13 \\
-Early/mid Qing (1700--1860)       & 284 & 0.087 & 0.18 \\
-Late Qing (1868--1893)            & 111 & 0.255 & 0.23 \\
-Cession / rupture ($\geq$1894)    & 177 & 0.268 & 0.18 \\
+Ming--Zheng founding ($\leq$1683) & 425 & 0.239 & 0.131 \\
+Early/mid Qing (1700--1860)       & 284 & 0.087 & 0.177 \\
+Late Qing (1868--1893)            & 111 & 0.257 & 0.259 \\
+Cession / rupture ($\geq$1894)    & 177 & 0.268 & 0.178 \\
 \bottomrule
 \end{tabular}
 \end{table*}
